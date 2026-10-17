@@ -1,0 +1,130 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter+Tight:wght@100;200;300;400;500;600;700&display=swap');
+@import "tailwindcss";
+
+/* Dark mode follows the data-theme attribute the theme toggle sets on <html> */
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+
+/* Palette from the design reference */
+@theme {
+  --font-sans: 'Inter Tight', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+
+  --color-forest: #247f24;
+  --color-mint: #95ff95;
+  --color-neon: #49ff49;
+  --color-sage: #567f56;
+  --color-leaf: #3acc3a;
+
+  --animate-letter: letter 1s cubic-bezier(0.2, 0.7, 0.2, 1) backwards;
+  --animate-rise: rise 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) backwards;
+  --animate-phone-in: phone-in 1.3s cubic-bezier(0.2, 0.7, 0.2, 1) backwards;
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-drift: drift 18s ease-in-out infinite;
+
+  @keyframes letter {
+    from { opacity: 0; transform: translateY(0.35em); filter: blur(10px); }
+    to { opacity: 1; transform: none; filter: none; }
+  }
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(40px); }
+    to { opacity: 1; transform: none; }
+  }
+  @keyframes phone-in {
+    from { opacity: 0; transform: translateY(140px) rotate(-10deg) scale(0.95); }
+    to { opacity: 1; transform: none; }
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-14px); }
+  }
+  @keyframes drift {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(60px, -40px) scale(1.1); }
+    66% { transform: translate(-40px, 30px) scale(0.92); }
+  }
+}
+
+/* Frosted glass panel */
+@utility glass {
+  background-color: rgb(255 255 255 / 0.45);
+  border: 1px solid rgb(255 255 255 / 0.65);
+  box-shadow: 0 10px 40px -10px rgb(14 40 14 / 0.18), inset 0 1px 0 rgb(255 255 255 / 0.7);
+  @apply backdrop-blur-xl backdrop-saturate-150;
+}
+@utility glass-dark {
+  background-color: rgb(255 255 255 / 0.08);
+  border: 1px solid rgb(255 255 255 / 0.16);
+  box-shadow: 0 10px 40px -10px rgb(0 0 0 / 0.35), inset 0 1px 0 rgb(255 255 255 / 0.12);
+  @apply backdrop-blur-xl backdrop-saturate-150;
+}
+
+/* Surface colors that swap between light and dark */
+:root {
+  color-scheme: light;
+  --paper: #f3f4f2;
+  --card: #ffffff;
+  --ink: #0e110e;
+  --muted: #5d665d;
+  --line: rgb(14 17 14 / 0.12);
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --paper: #0b100b;
+  --card: #141b14;
+  --ink: #edf3ed;
+  --muted: #9aab9a;
+  --line: rgb(237 243 237 / 0.14);
+}
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-card: var(--card);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    overflow-x: clip;
+  }
+  body {
+    @apply bg-paper text-ink font-sans antialiased;
+    overflow-x: clip;
+  }
+  section[id],
+  main {
+    scroll-margin-top: 5rem;
+  }
+  :focus-visible {
+    outline: 3px solid var(--color-leaf);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+  /* Theme switch: the circle reveal is driven from App.jsx */
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+    mix-blend-mode: normal;
+  }
+  /* Fallback for browsers without view transitions */
+  .theme-fade,
+  .theme-fade *,
+  .theme-fade *::before,
+  .theme-fade *::after {
+    transition: background-color 0.45s ease, color 0.45s ease, border-color 0.45s ease, fill 0.45s ease !important;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    ::before,
+    ::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
